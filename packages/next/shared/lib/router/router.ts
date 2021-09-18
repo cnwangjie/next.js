@@ -1397,24 +1397,26 @@ export default class Router implements BaseRouter {
         )
       }
 
-      const props = await this._getData<CompletePrivateRouteInfo>(() =>
-        __N_SSG
-          ? this._getStaticData(dataHref!)
-          : __N_SSP
-          ? this._getServerData(dataHref!)
-          : this.getInitialProps(
-              Component,
-              // we provide AppTree later so this needs to be `any`
-              {
-                pathname,
-                query,
-                asPath: as,
-                locale: this.locale,
-                locales: this.locales,
-                defaultLocale: this.defaultLocale,
-              } as any
-            )
-      )
+      const props = routeProps.shallow
+        ? {}
+        : await this._getData<CompletePrivateRouteInfo>(() =>
+          __N_SSG
+            ? this._getStaticData(dataHref!)
+            : __N_SSP
+            ? this._getServerData(dataHref!)
+            : this.getInitialProps(
+                Component,
+                // we provide AppTree later so this needs to be `any`
+                {
+                  pathname,
+                  query,
+                  asPath: as,
+                  locale: this.locale,
+                  locales: this.locales,
+                  defaultLocale: this.defaultLocale,
+                } as any
+              )
+        )
 
       routeInfo.props = props
       this.components[route] = routeInfo
